@@ -1,4 +1,4 @@
-# sh curl-scripts/index.sh
+# sh curl-scripts/create.sh
 API="http://localhost:4741"
 URL_PATH="/userImages"
 

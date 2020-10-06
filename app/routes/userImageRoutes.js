@@ -25,9 +25,9 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // Create router
 router.post('/userImages', requireToken, (req, res, next) => {
   req.body.userImage.owner = req.user._id
-  // const userImagesData = req.body.userImage
+  const userImagesData = req.body.userImage
   // use our UserImage model
-  UserImage.create(req.body.userImage)
+  UserImage.create(userImagesData)
   // userImage created successfully
     .then(userImage => {
       res.status(201).json({ userImage })

@@ -24,4 +24,4 @@ const imageSchema = new mongoose.Schema({
 
 const UserImage = mongoose.model('UserImage', imageSchema)
 
-module.export = UserImage
+module.exports = UserImage
