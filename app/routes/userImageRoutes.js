@@ -1,5 +1,5 @@
 // Require in the User Image Schema
-const UserImage = require('./../models/imageSchema')
+const UserImage = require('../models/imageSchema')
 
 // require in express
 const express = require('express')
@@ -25,12 +25,12 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // Create router
 router.post('/userImages', requireToken, (req, res, next) => {
   req.body.userImage.owner = req.user._id
-  const userImagesData = req.body.userImage
+  // const userImagesData = req.body.userImage
   // use our UserImage model
-  UserImage.create(userImagesData)
+  UserImage.create(req.body.userImage)
   // userImage created successfully
-    .then(userImages => {
-      res.status(201).json({ userImages })
+    .then(userImage => {
+      res.status(201).json({ userImage })
     })
     // Create error
     .catch(next)
