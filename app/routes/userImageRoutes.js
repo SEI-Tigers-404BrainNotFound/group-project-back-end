@@ -22,12 +22,12 @@ const requireOwnership = customErrors.requireOwnership
 // require Token
 const requireToken = passport.authenticate('bearer', { session: false })
 
-const AWS = require('aws-sdk');
+const AWS = require('aws-sdk')
 
-const fs = require('fs');
+const fs = require('fs')
 
-const multer = require('multer');
-const storage = multer.memoryStorage();
+const multer = require('multer')
+const storage = multer.memoryStorage()
 // const upload = multer({storage});
 const upload = multer({ dest: 'uploads/' })
 
@@ -37,7 +37,7 @@ router.post('/userImages', requireToken, (req, res, next) => {
 
   uploadImageToAws(req.body)
 
-  const userImagesData = req.body.userImage
+  const userImagesData = req.body
   // use our UserImage model
   UserImage.create(userImagesData)
   // userImage created successfully
@@ -49,42 +49,68 @@ router.post('/userImages', requireToken, (req, res, next) => {
 })
 
 router.post('/userImages/Image', requireToken, upload.single('photoupload'), (req, res, next) => {
-  
-  const file = req.file;
-  const fileStream = fs.createReadStream(req.file.path);
+
+  const file = req.file
+  const fileStream = fs.createReadStream(req.file.path)
+  console.log(req)
 
   fileStream.on('open', function () {
     // This just pipes the read stream to the response object (which goes to the client)
     //readStream.pipe(res);
     // Configure the Amazon module.
-    AWS.config.region = 'us-east-1'; 
+    AWS.config.region = 'us-east-1'
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: 'us-east-1:2041273b-6722-4303-b894-8e5f1253383e',
-    });
+      IdentityPoolId: 'us-east-1:2041273b-6722-4303-b894-8e5f1253383e',
+    })
 
     // // Create a new S3 proxy object
     const s3 = new AWS.S3({
-      apiVersion: '2006-03-01',
-    });
+      apiVersion: '2006-03-01'
+    })
 
-    const params ={
+    const params = {
       Bucket: '404brainnotfound',
       ContentType: file.mimetype,
       Key: req.body.filename,
-      ACL: "public-read",
+      ACL: 'public-read',
       Body: fileStream
     }
 
-    s3.upload(params, function(err, data) {
+    s3.upload(params, function (err, data) {
       if (err) console.log(err)
       else {
-        console.log('success')
+        // use our UserImage model
+        // file: null,
+        // fileName: '',
+        // description: '',
+        // tag: '',
+        // owner: ''
+      //   userImage: {
+      //   file: null,
+      //   fileName: '',
+      //   description: '',
+      //   tag: '',
+      //   owner: ''
+      // }
+        const userImagesData = {userImage:
+          {fileName: req.body.fileName,
+            description: req.body.description,
+            tag: req.body.tag,
+            owner: req.body.owner}
+        }
+        UserImage.create(userImagesData)
+        // userImage created successfully
+          .then(userImage => {
+            res.status(201).json({ userImage })
+          })
+          // Create error
+          .catch(next)
+        console.log('hi')
       }
-    })    
-  });
- 
-})
+    })
+  })
 
+})
 
 // Index router
 router.get('/userImages', requireToken, (req, res, next) => {
