@@ -52,11 +52,11 @@ router.post('/userImages/Image', requireToken, upload.single('photoupload'), (re
 
   const file = req.file
   const fileStream = fs.createReadStream(req.file.path)
-  console.log(req)
+  console.log(req.body)
 
   fileStream.on('open', function () {
     // This just pipes the read stream to the response object (which goes to the client)
-    //readStream.pipe(res);
+    //readStream.pipe(res)
     // Configure the Amazon module.
     AWS.config.region = 'us-east-1'
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -92,12 +92,12 @@ router.post('/userImages/Image', requireToken, upload.single('photoupload'), (re
       //   tag: '',
       //   owner: ''
       // }
-        const userImagesData = {userImage:
-          {fileName: req.body.fileName,
+        const userImagesData =
+          {fileName: req.file.originalname,
             description: req.body.description,
             tag: req.body.tag,
-            owner: req.body.owner}
-        }
+            owner: req.user._id}
+
         UserImage.create(userImagesData)
         // userImage created successfully
           .then(userImage => {
