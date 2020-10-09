@@ -107,8 +107,10 @@ router.get('/userImages', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+// Get all images for all users sorted by the most recent creation date.
+// if we have time the orderBy should be past as a query parameter
 router.get('/userImages/orderdByDateDesc', requireToken, (req, res, next) => {
-  UserImage.find({owner: req.user.id}).sort({ createdAt: 'desc' })
+  UserImage.find().sort({ createdAt: 'desc' })
     .populate('owner')
     .then(userImages => {
       return userImages.map(userImage => userImage.toObject())
