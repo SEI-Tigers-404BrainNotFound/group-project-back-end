@@ -78,5 +78,6 @@ We added a special route to return image metadata for all users, in createdAt or
     - Be able to inject various strategy / adapters to support different cloud
       providers. For example, we should be able to store images in AWS, Azure, Google Cloud,
       or any other cloud providers.
-    - Improve the AWS security for our bucket.  
+    - Improve the AWS security for our bucket.
+    - Fix the patch route. A Mongoose API that we are using is deprecated unless we configure something. This is a temp fix.
 
