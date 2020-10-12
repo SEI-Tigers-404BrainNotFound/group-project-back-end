@@ -34,6 +34,26 @@ Everything else was just standard CRUD to the userImages collection in MongoDB. 
 
 We added a special route to return image metadata for all users, in createdAt order descending. This was done to support the News Feed page so that you could see all images for all users with the most recent photos first.
 
+# API End Points
+
+| Verb   | URI Pattern                   | Controller#Action   |
+|--------|--------------------------------|-----------------------------|
+| POST   | `/sign-up`                     | `users#signup`              |
+| POST   | `/sign-in`                     | `users#signin`              |
+| DELETE | `/sign-out`                    | `users#signout`             |
+| PATCH  | `/change-password`             | `users#changepw`            |
+| GET    | `/userImages`                  | `userImages#index`          |
+| GET*   | `/userImages/orderdByDateDesc` | `userImages#index`          |
+| POST   | `/userImages`                  | `userImages#create`         |
+| POST*  | `/userImages/Image`            | `userImages#image upload`   |
+| GET    | `/userImages/:id`              | `userImages#show an image`  |
+| PATCH  | `/userImages/:id`              | `userImages#update metadata`|
+
+  * GET*  - This will be a query parameter in the next version.
+  * POST* - This will be a query parameter in the next version.
+
+All data returned from API actions is formatted as JSON.
+
 ### User stories
     1.  As an unregistered user, I would like to sign up with email and password.
     2.  As a registered user, I would like to sign in with email and password.
@@ -63,6 +83,9 @@ We added a special route to return image metadata for all users, in createdAt or
     10. Passport JS
     11. Express JS
     12. Bcrypt
+
+### ERD 
+![ERD Diagram](https://i.imgur.com/0KaIFn4.jpg)
 
 
 ### Links
