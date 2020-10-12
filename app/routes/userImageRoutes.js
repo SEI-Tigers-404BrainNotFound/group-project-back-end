@@ -121,7 +121,8 @@ router.patch('/userImages/:id', requireToken, removeBlanks, (req, res, next) => 
     .then(handle404)
     .then(userImage => {
       requireOwnership(req, userImage)
-      return userImage.updateOne(req.body.userImage)
+      return UserImage.findByIdAndUpdate({ "_id": req.params.id },
+      { $set: req.body.userImage }, { new: true })
     })
     .then(userImages => res.json({ userImages }))
     .catch(next)
